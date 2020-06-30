@@ -1,45 +1,6 @@
 class Solution {
     // solution 1
     public int trap(int[] height) {
-        int result = 0;
-        int i = 0;
-
-        while (i < height.length - 1) {
-            int j = i + 1;
-            int max = j;
-            while (j < height.length && height[j] <= height[i]) {
-                if (height[max] < height[j]) {
-                    max = j;
-                }
-                j++;
-            }
-
-            if (j < height.length) {
-                max = j;
-            }
-            
-            result += calculateArea(height, i, max);
-            i = max;
-        }
-
-        return result;
-    }
-
-    private int calculateArea(int[] height, int i, int j) {
-        int area = 0;
-        int low = Math.min(height[i], height[j]);
-
-        for (int x = i; x < j; x++) {
-            if (height[x] >= low) {
-                continue;
-            }
-            area += low - height[x];
-        }
-        return area;
-    }
-
-    // solution 2
-    public int trap2(int[] height) {
         int i = 0, j = height.length - 1;
         while (i < j && height[i + 1] > height[i]) {
             i++;
@@ -66,6 +27,25 @@ class Solution {
         return result;
     }
 
-    // solution 3
+    // solution 2
+    public int trap2(int[] height) {
+        int result = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+        
+        for (int i = 0; i < height.length; ++i) {
+            while (!stack.isEmpty() && height[stack.peek()] <= height[i]) {
+                int pop = stack.pop();
+                if (stack.isEmpty()) {
+                    break;
+                }
+                int h = Math.min(height[i], height[stack.peek()]) - height[pop];
+                int w = i - stack.peek() - 1;
+                result += h * w;
+            }
+            stack.push(i);
+        }
+        
+        return result;
+    }
     
 }
