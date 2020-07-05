@@ -1,3 +1,6 @@
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 class Solution {
     // solution 1
     public int trap(int[] height) {
