@@ -1,22 +1,22 @@
 class Solution {
-    private Set<Integer> col = new HashSet<>();
-    private Set<Integer> pie = new HashSet<>();
-    private Set<Integer> na = new HashSet<>();
-    
     public List<List<String>> solveNQueens(int n) {
         List<List<String>> result = new ArrayList<>();
-        dfs(0, n, result, new ArrayList<>());
+        boolean[] col = new boolean[n];
+        boolean[] pie = new boolean[n * 2];
+        boolean[] na = new boolean[n * 2];
+        dfs(0, n, result, col, pie, na, new ArrayList<>());
         return result;
     }
     
-    private void dfs(int row, int n, List<List<String>> result, List<String> cur) {
+    private void dfs(int row, int n, List<List<String>> result, 
+                     boolean[] col, boolean[] pie, boolean[] na, List<String> cur) {
         if (row == n) {
             result.add(new ArrayList<>(cur));
             return;
         }
         
         for (int i = 0; i < n; ++i) {
-            if (col.contains(i) || pie.contains(row + i) || na.contains(row - i)) {
+            if (col[i] || pie[row + i] || na[n + row - i]) {
                 continue;
             }
             
@@ -24,16 +24,16 @@ class Solution {
             Arrays.fill(c, '.');
             c[i] = 'Q';
         
-            col.add(i);
-            pie.add(row + i);
-            na.add(row - i);
+            col[i] = true;
+            pie[row + i] = true;
+            na[n + row - i] = true;
             cur.add(new String(c));
             
-            dfs(row + 1, n, result, cur);
+            dfs(row + 1, n, result, col, pie, na, cur);
             
-            col.remove(i);
-            pie.remove(row + i);
-            na.remove(row - i);
+            col[i] = false;
+            pie[row + i] = false;
+            na[n + row - i] = false;
             cur.remove(cur.size() - 1);
         }
     }
