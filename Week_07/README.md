@@ -15,4 +15,3 @@
 # Advanced Search
 1. 剪枝
 2. 双向dfs
-3. 
